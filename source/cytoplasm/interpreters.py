@@ -1,15 +1,18 @@
 def ImportInterpreters():
     import os, imp
-    from configuration import interpreters
-    if os.path.exists("_interpreters.py"):
-        interpreters_module = imp.load_source("_interpreters", "_interpreters.py")
+    # If the user has a file called _config.py, import that.
+    # The user's _config.py should "from cytoplasm.configuration import *" if they want to use
+    # some of the defaults.
+    if os.path.exists("_config.py"):
+        imp.load_source("_config", "_config.py")
         try:
-            from _interpreters import interpreters as interpreters_imported
+            from _config import interpreters
         except ImportError:
             # raise this error if _interpreters.py doesn't have a variable called "interpreters"
-            raise errors.InterpreterError("Your _interpreters.py doesn't have anything I can use.")
-        # overwrite the default interpreters dictionary with the user's
-        interpreters.update(interpreters_imported)
+            raise errors.InterpreterError("Your _config.py doesn't have anything I can use.")
+    else:
+        # otherwise, just import the default interpreters
+        from configuration import interpreters
     return interpreters
 
 def SaveReturned(fn):
