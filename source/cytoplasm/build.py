@@ -11,7 +11,9 @@ def copy_over():
             # if the file has a suffix that matches any of the interpreters,
             # parse that file with that interpreter
             if file.endswith(".%s" %(ending)): 
-                interpeters[ending](file)
+                # give the interpreter two variables -- the original place and hte destination
+                # of the itnerpreted file.
+                interpreters[ending](file, "%s/%s" %(build_dir, file.replace(".%s" %(ending), "")))
                 handled = True
                 break
         if not handled:
