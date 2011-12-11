@@ -1,4 +1,4 @@
-import os, shutil
+import os, shutil, imp, errors
 from configuration import *
 
 def copy_over():
@@ -19,6 +19,16 @@ def copy_over():
             shutil.copy2(file, build_dir)
 
 def build():
+    # Import the user's _interpreters.py, if it exists in this directory
+    if os.path.exists("_interpreters.py"): 
+        interpreters_module = imp.load_source("_interpreters", "_interpreters.py")
+        try:
+            from _interpreters import interpreters as interpreters_imported
+        except ImportError:
+            # raise this error if _interpreters.py doesn't have a variable called "interpreters"
+            raise errors.InterpreterError("Your _interpreters.py doesn't have anything I can use.")
+        # overwrite the default interpreters dictionary with the user's
+        interpreters.update(interpreters_imported)
     # Create the build directory, if it doesn't exist
     if not os.path.exists(build_dir):
         os.mkdir(build_dir)
