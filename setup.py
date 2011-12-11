@@ -6,6 +6,7 @@ setup(
     description = "A static, blog-aware website generator written in python.",
     package_dir = {'': 'source'},
     packages = ['cytoplasm'],
-    scripts = ['cytoplasm']
+    scripts = ['cytoplasm'],
+    install_requires=['mako']
 )
         
