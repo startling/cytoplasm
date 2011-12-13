@@ -4,9 +4,10 @@ from controllers import controllerclass
 def copy_over():
     "Copy the files not beginning with '_' to the site directory"
     interpreter_dictionary = configuration.interpreters
-    # All of the files that don't begin with '_' or '.'
+    # All of the files and directories that don't begin with '_' or '.'
     to_copy = [file for file in os.listdir(".") if not file.startswith(("_", "."))]
-    for file in to_copy: 
+    files = [file for file in to_copy if not os.path.isdir(file)]
+    for file in files:
         handled = False
         for ending in interpreter_dictionary.keys():
             # if the file has a suffix that matches any of the interpreters,
@@ -21,6 +22,10 @@ def copy_over():
         if not handled:
             # otherwise, simply copy the file over
             shutil.copy2(file, configuration.build_dir)
+    directories = [file for file in to_copy if os.path.isdir(file)]
+    for dir in directories:
+        # copy all the directories that don't start with "." or "_" completely.
+        shutil.copytree(dir, "%s/%s" %(configuration.build_dir, dir))
 
 def build():
     # Create the build directory, if it doesn't exist
