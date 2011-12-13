@@ -1,5 +1,5 @@
 # This is a default configuration file, that will be imported before the user's configuration
-import os, imp
+import os, imp, controllers
 
 # Specify the build directory, where the built site will be copied to
 build_dir = "_build"
@@ -25,6 +25,9 @@ def mako_interpreter(file, **kwargs):
 
 interpreters["mako"] = mako_interpreter
 
+# controllers
+testcontroller = controllers.Controller("boo", "fuck")
+controllers = [testcontroller]
 
 # If the user has a file called _config.py, import that.
 # The user's _config.py should "from cytoplasm.configuration import *" if they want to use

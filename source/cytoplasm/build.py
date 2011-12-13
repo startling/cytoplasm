@@ -26,3 +26,5 @@ def build():
     if not os.path.exists(configuration.build_dir):
         os.mkdir(configuration.build_dir)
     copy_over()
+    for controller in configuration.controllers:
+        controller()
