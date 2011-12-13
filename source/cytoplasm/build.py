@@ -1,4 +1,5 @@
 import os, shutil, errors, interpreters, configuration
+from controllers import controllerclass
 
 def copy_over():
     "Copy the files not beginning with '_' to the site directory"
@@ -26,5 +27,10 @@ def build():
     if not os.path.exists(configuration.build_dir):
         os.mkdir(configuration.build_dir)
     copy_over()
-    for controller in configuration.controllers:
-        controller()
+    for controller, arguments in configuration.controllers:
+        # create a controller object of the class returned by controllerclass
+        controller_object = apply(controllerclass(controller), arguments)
+        # call the controller object 
+        controller_object()
+        
+

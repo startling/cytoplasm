@@ -25,7 +25,10 @@ def mako_interpreter(file, **kwargs):
 
 interpreters["mako"] = mako_interpreter
 
-# controllers
-testcontroller = controllers.Controller("boo", "fuck")
-controllers = [testcontroller]
+# This is a list of controllers to be used.
+# Each item should be a 2-tuple containing:
+# * The controller's module's name; i.e, the thing in _controllers
+# * The list of arguments to use when instantiating the controller class; usually at least the 
+#   controller's source directory and where files should be output to, in the build directory.
+controllers = []
 
