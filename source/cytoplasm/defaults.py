@@ -29,9 +29,3 @@ interpreters["mako"] = mako_interpreter
 testcontroller = controllers.Controller("boo", "fuck")
 controllers = [testcontroller]
 
-# If the user has a file called _config.py, import that.
-# The user's _config.py should "from cytoplasm.configuration import *" if they want to use
-# some of the defaults.
-if os.path.exists("_config.py"):
-    imp.load_source("_config", "_config.py")
-    from _config import *
