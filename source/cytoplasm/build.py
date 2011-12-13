@@ -3,8 +3,8 @@ import os, shutil, errors, interpreters, configuration
 def copy_over():
     "Copy the files not beginning with '_' to the site directory"
     interpreter_dictionary = configuration.interpreters
-    # All of the files that don't begin with '_':
-    to_copy = [file for file in os.listdir(".") if not file.startswith("_")]
+    # All of the files that don't begin with '_' or '.'
+    to_copy = [file for file in os.listdir(".") if not file.startswith(("_", "."))]
     for file in to_copy: 
         handled = False
         for ending in interpreter_dictionary.keys():
