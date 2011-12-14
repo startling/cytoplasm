@@ -1,5 +1,6 @@
-import os, shutil, errors, interpreters, configuration
-from controllers import controllerclass
+import os, shutil
+from . import errors, interpreters, configuration
+from .controllers import controllerclass
 
 def copy_over():
     "Copy the files not beginning with '_' to the site directory"

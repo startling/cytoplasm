@@ -1,5 +1,6 @@
 # This is a default configuration file, that will be imported before the user's configuration
-import os, imp, controllers
+import os, imp
+from . import controllers
 
 # Specify the build directory, where the built site will be copied to
 build_dir = "_build"
