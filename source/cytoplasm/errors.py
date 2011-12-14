@@ -1,2 +1,3 @@
-class ControllerError(StandardError): pass
-class InterpreterError(StandardError): pass
+class CytoplasmError(Exception): pass
+class ControllerError(CytoplasmError): pass
+class InterpreterError(CytoplasmError): pass
