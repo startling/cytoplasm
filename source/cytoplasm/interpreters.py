@@ -1,3 +1,5 @@
+from .errors import InterpreterError
+
 def SaveReturned(fn):
     '''Some potential interpreters, like Mako, don't give you an easy way to save to a destination.
     In these cases, simply use this function as a decorater.'''
@@ -22,7 +24,11 @@ def interpret(file, destination, **kwargs):
         if file.endswith(".%s" %(ending)):
             # give the interpreter two variables -- the original place and hte destination
             # of the interpreted file.
-            interpreters[ending](file, destination, **kwargs)
+            try:
+                interpreters[ending](file, destination, **kwargs)
+            except Exception as exception:
+                # if the interpreter chokes, raise an InterpreterError with some useful information.
+                raise InterpreterError("%s on file '%s': %s" %(ending, file, exception))
             handled = True
             return True
     return False
