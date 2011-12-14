@@ -1,4 +1,26 @@
 #!/usr/bin/env python
-import cytoplasm
+import cytoplasm, argparse, sys
 
-cytoplasm.build()
+def build_site():
+    "This is what will be called when the user runs `cytoplasm build`"
+    cytoplasm.build()
+
+class Parser(argparse.ArgumentParser):
+    "A custom parser class with more helpful error messages."
+    def error(self, message): 
+        sys.stderr.write('error: %s\n' % message) 
+        self.print_help()
+        sys.exit(2) 
+
+# Make an argparse parser, using the class above.
+parser = Parser(description='a static blog compiler.', add_help=True)
+# (subparsers, aka subcommands)
+subparsers = parser.add_subparsers(title="Subcommands")
+# "build" subparser, i.e. build the site
+build = subparsers.add_parser('build', help='Build the cytoplasm site in the working directory.')
+# Associate the build function, above, with the subcommand `build`.
+build.set_defaults(func=build_site)
+# Parse the arguments from the command line.
+args = parser.parse_args()
+# run the functions associated with the arguments.
+args.func()
