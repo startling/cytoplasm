@@ -27,7 +27,7 @@ def build():
     copy_over()
     for controller, arguments in configuration.controllers:
         # create a controller object of the class returned by controllerclass
-        controller_object = apply(controllerclass(controller), arguments)
+        controller_object = controllerclass(controller)(*arguments)
         # call the controller object 
         controller_object()
         
