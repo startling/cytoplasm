@@ -1,5 +1,4 @@
 import imp, os
-from . import configuration
 
 def controllerclass(name):
     "Given the name of a controller's module, return that controller's class."
