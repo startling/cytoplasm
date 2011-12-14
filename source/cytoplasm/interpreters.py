@@ -15,7 +15,7 @@ def SaveReturned(fn):
 
 def interpret(file, destination, **kwargs):
     "Interpret a file with an interpreter according to its suffix."
-    from configuration import interpreters
+    from .configuration import interpreters
     for ending in interpreters.keys():
         # if the file has a suffix that matches any of the interpreters,
         # parse that file with that interpreter
