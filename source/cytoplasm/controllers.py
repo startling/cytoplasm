@@ -1,4 +1,4 @@
-import configuration, imp
+import configuration, imp, os
 
 def controllerclass(name):
     "Given the name of a controller's module, return that controller's class."
@@ -16,6 +16,8 @@ class Controller(object):
         self.data_directory = data
         # where it should write files to...
         self.destination_directory = build
+        # create the destination directort, if it doesn't exist
+        if not os.path.exists(self.destination_directory): os.mkdir(self.destination_directory)
     
     def __call__(self):
         # do whatever needs to be done here...
