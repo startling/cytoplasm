@@ -15,7 +15,7 @@ class Controller(object):
         # where this controller finds its data
         self.data_directory = data
         # where it should write files to...
-        self.build_dir = build
+        self.destination_directory = build
     
     def __call__(self):
         # do whatever needs to be done here...
