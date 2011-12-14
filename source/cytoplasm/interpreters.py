@@ -13,7 +13,7 @@ def SaveReturned(fn):
         f.close()
     return InterpreterWithSave
 
-def interpret(file, destination):
+def interpret(file, destination, **kwargs):
     "Interpret a file with an interpreter according to its suffix."
     from configuration import interpreters
     for ending in interpreters.keys():
@@ -22,7 +22,7 @@ def interpret(file, destination):
         if file.endswith(".%s" %(ending)):
             # give the interpreter two variables -- the original place and hte destination
             # of the interpreted file.
-            interpreters[ending](file, destination)
+            interpreters[ending](file, destination, **kwargs)
             handled = True
             return True
     return False
