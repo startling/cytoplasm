@@ -13,3 +13,17 @@ def SaveReturned(fn):
         f.close()
     return InterpreterWithSave
 
+def interpret(file, destination):
+    "Interpret a file with an interpreter according to its suffix."
+    from configuration import interpreters
+    for ending in interpreters.keys():
+        # if the file has a suffix that matches any of the interpreters,
+        # parse that file with that interpreter
+        if file.endswith(".%s" %(ending)):
+            # give the interpreter two variables -- the original place and hte destination
+            # of the interpreted file.
+            interpreters[ending](file, destination)
+            handled = True
+            return True
+    return False
+

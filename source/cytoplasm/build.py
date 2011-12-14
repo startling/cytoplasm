@@ -8,18 +8,11 @@ def copy_over():
     to_copy = [file for file in os.listdir(".") if not file.startswith(("_", "."))]
     files = [file for file in to_copy if not os.path.isdir(file)]
     for file in files:
-        handled = False
-        for ending in interpreter_dictionary.keys():
-            # if the file has a suffix that matches any of the interpreters,
-            # parse that file with that interpreter
-            if file.endswith(".%s" %(ending)): 
-                # give the interpreter two variables -- the original place and hte destination
-                # of the interpreted file.
-                destination = "%s/%s" %(configuration.build_dir, file.replace(".%s" %(ending), ""))
-                interpreter_dictionary[ending](file, destination)
-                handled = True
-                break
-        if not handled:
+        # first, try to interpret each of these files with one of the interpreters
+        # if none of the interpreters match, it returns False
+        # the destination, if interpreted, should be the filename without that last suffix
+        destination = file.rsplit('.', 1)[0]
+        if not interpreters.interpret(file, "%s/%s" %(configuration.build_dir, destination)):
             # otherwise, simply copy the file over
             shutil.copy2(file, configuration.build_dir)
     directories = [file for file in to_copy if os.path.isdir(file)]
