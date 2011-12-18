@@ -21,7 +21,7 @@ mako_lookup = mako.lookup.TemplateLookup(directories=['.'])
 @SaveReturned
 def mako_interpreter(file, **kwargs):
     # pass kwargs to the mako template
-    page = mako.template.Template(filename=file, lookup=mako_lookup)
+    page = mako.template.Template(filename=file, lookup=mako_lookup, input_encoding='utf-8')
     # this is dumb but it's the only way I can make it work.
     if sys.version_info.major == 2:
         # if it's python 2, use .encode('utf-8', 'replace')
