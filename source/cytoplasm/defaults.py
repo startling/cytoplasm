@@ -1,5 +1,5 @@
 # This is a default configuration file, that will be imported before the user's configuration
-import os, imp
+import os, imp, sys
 from . import controllers
 
 # Specify the build directory, where the built site will be copied to
@@ -22,7 +22,13 @@ mako_lookup = mako.lookup.TemplateLookup(directories=['.'])
 def mako_interpreter(file, **kwargs):
     # pass kwargs to the mako template
     page = mako.template.Template(filename=file, lookup=mako_lookup)
-    return page.render_unicode(**kwargs)
+    # this is dumb but it's the only way I can make it work.
+    if sys.version_info.major == 2:
+        # if it's python 2, use .encode('utf-8', 'replace')
+        return page.render_unicode(**kwargs).encode('utf-8', 'replace')
+    elif sys.version_info.major == 3:
+        # otherwise, just render it...
+        return page.render_unicode(**kwargs)
 
 interpreters["mako"] = mako_interpreter
 
