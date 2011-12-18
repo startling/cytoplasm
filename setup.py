@@ -7,6 +7,6 @@ setup(
     package_dir = {'': 'source'},
     packages = ['cytoplasm'],
     scripts = ['cytoplasm'],
-    install_requires=['mako']
+    install_requires=['mako', 'argparse']
 )
         
