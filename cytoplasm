@@ -9,7 +9,8 @@ def build_site(**args):
 def init_site(site, **args):
     "This is the function called when you run `cytoplasm init something`"
     sites = {
-            "bare": "git://github.com/startling/cytoplasm-bare.git"
+            "bare": "git://github.com/startling/cytoplasm-bare.git",
+            "cytoplasm-site": "git://github.com/startling/cytoplasm-site.git",
     }
     os.system("git clone %s ." %(sites[site]))
     os.system("git submodule init")
@@ -34,7 +35,7 @@ build.set_defaults(func=build_site)
 # "init" subparse
 init = subparsers.add_parser('init', help='Clone a repository to work from (requires Git).')
 init.set_defaults(func=init_site)
-init.add_argument('site', choices=["bare"], help="The site you want to clone.")
+init.add_argument('site', choices=["bare", "cytoplasm"], help="The site you want to clone.")
 # Parse the arguments from the command line.
 args = parser.parse_args()
 # run the functions associated with the arguments.
