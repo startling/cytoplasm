@@ -18,6 +18,9 @@ def copy_over():
             shutil.copy2(file, configuration.build_dir)
     directories = [file for file in to_copy if os.path.isdir(file)]
     for dir in directories:
+        if os.path.exists("%s/%s" %(configuration.build_dir, dir)):
+            # if the directory exists, delete it.
+            shutil.rmtree("%s/%s" %(configuration.build_dir, dir))
         # copy all the directories that don't start with "." or "_" completely.
         shutil.copytree(dir, "%s/%s" %(configuration.build_dir, dir))
 
