@@ -11,6 +11,15 @@ from .interpreters import SaveReturned
 # after it's finished
 interpreters = {}
 
+# This is a decorator that can be prepended to an interpreter function, so that you don't need
+# to have the manually add each to the interpreters dictionary.
+def Interpreter(*keys):
+    # You can have as many suffixes as you want.
+    def Add(fn):
+        for suffix in keys:
+            interpreters[suffix] = fn
+    return Add
+
 # An interpreter for mako, which will be prett essential both for "static" files and for controller
 import mako.lookup, mako.template
 # Mako should look for templates to include in the current directory.
@@ -18,6 +27,7 @@ import mako.lookup, mako.template
 mako_lookup = mako.lookup.TemplateLookup(directories=['.'])
 # Mako doesn't come with an easy built-in way to save the output to a certain file;
 # this decorator does that.
+@Interpreter("mako")
 @SaveReturned
 def mako_interpreter(file, **kwargs):
     # pass kwargs to the mako template
@@ -29,8 +39,6 @@ def mako_interpreter(file, **kwargs):
     elif sys.version_info.major == 3:
         # otherwise, just render it...
         return page.render_unicode(**kwargs)
-
-interpreters["mako"] = mako_interpreter
 
 # This is a list of controllers to be used.
 # Each item should be a 2-tuple containing:
