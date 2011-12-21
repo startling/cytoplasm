@@ -10,7 +10,7 @@ setup(
     description = "A static, blog-aware website generator written in python.",
     packages = ['cytoplasm'],
     scripts = ['scripts/cytoplasm'],
-    requires = ['Mako'],
+    install_requires = ['Mako'],
     classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
