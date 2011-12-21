@@ -18,7 +18,18 @@ def init_site(site, **args):
 
 def serve_site(port, rebuild, **args):
     "This is the function called when you run `cytoplasm serve`: serve the site in the build_dir."
-    pass
+    import cytoplasm.server
+    # make this work in either Python 2.x or 3.x
+    if sys.version_info.major >= 3:
+        from http.server import HTTPServer
+    else:
+        from BaseHTTPServer import HTTPServer
+    # get the handler form cytoplasm.server, according to whether rebuild is true or false
+    handler = cytoplasm.server.handler(rebuild)
+    # make a server with the handler and the port
+    httpd = HTTPServer(('', port), handler)
+    while True:
+        httpd.handle_request()
 
 class Parser(argparse.ArgumentParser):
     "A custom parser class with more helpful error messages."
