@@ -6,9 +6,15 @@ if sys.version_info.major >= 3:
 else:
     from SimpleHTTPServer import SimpleHTTPRequestHandler
 
+# keep track of when things were last built in this global variable
+most_recent_time = 0
+
 def handler(rebuild):
     # build once first...
     cytoplasm.build()
+    # and save the most recent time
+    global most_recent_time
+    most_recent_time = most_recent(".")
     # change to the build directory, where things are to be served from.
     os.chdir(cytoplasm.configuration.build_dir)
     if rebuild:
@@ -18,20 +24,43 @@ def handler(rebuild):
         # otherwise, just return the SimpleHTTPRequestHandler
         return SimpleHTTPRequestHandler
 
+def most_recent(directory):
+    "Determine the most recent modified time in the source directory, ignoring dotfiles and _build."
+    build_dir = cytoplasm.configuration.build_dir
+    # get the candidate files:
+    files = [f for f in os.listdir(directory) if f != build_dir and not f.startswith(".")]
+    # get each of their times
+    times = [os.stat(os.path.join(directory, f)).st_mtime for f in files]
+    # the highest time here is the most recent; return that.
+    return max(times)
+
+
 class RebuildHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         "Send a GET request, and, if anything has changed, rebuild the site."
         # overwrite the do_GET method in SimpleHTTPRequestHandler with this.
-        # it's mostly the same except for the little 'build' part here.
+        # it's mostly the same except for the 'build' part here.
+        # declare most_recent_time global; we'll be changing it later.
+        global most_recent_time
         f = self.send_head()
         if f:
-            # ugly hack: move up one directory, build, and move back down to the build directory.
-            os.chdir("..")
-            # always rebuild the site. This can make things slow.
-            cytoplasm.build()
-            os.chdir(cytoplasm.configuration.build_dir)
-            # copy the file to self.wfile...
+            # figure out what the most recent time edited is in the source directory
+            new_recent = most_recent("..")
+            # only build the site if the new most recent is more recent than the old one,
+            # i.e. if one or more of the files has been edited.
+            if new_recent > most_recent_time:
+                # update most_recent_time
+                most_recent_time = new_recent
+                # The following is an ugly hack:
+                # Move up one directory to the source directory
+                os.chdir("..")
+                # Build the site from the source directory
+                cytoplasm.build()
+                # and move back down to the build directory to continue serving.
+                os.chdir(cytoplasm.configuration.build_dir)
+            # Copy the file to self.wfile...
             self.copyfile(f, self.wfile)
+            # and then close it.
             f.close()
 
 
