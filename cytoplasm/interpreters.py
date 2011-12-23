@@ -1,3 +1,7 @@
+'''
+These are some utilites used when writing and handling interpreters.
+'''
+
 from .errors import InterpreterError
 
 def SaveReturned(fn):

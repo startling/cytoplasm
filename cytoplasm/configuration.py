@@ -1,5 +1,8 @@
-# This module contains the user's configurations, to be accessed like:
-# `print cytoplasm.configuration.build_dir`
+'''
+This module imports everything from the user's `_config.py` into its namespace.
+So to get configuration of the current working directory, `import cytoplasm.configuration`.
+'''
+
 import os, imp
 from .errors import CytoplasmError
 

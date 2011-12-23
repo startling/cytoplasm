@@ -1,3 +1,7 @@
+'''
+These are the things used in making and using controllers.
+'''
+
 import imp, os
 
 def controllerclass(name):

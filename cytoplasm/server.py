@@ -1,3 +1,7 @@
+'''
+These are the things that are used when you `cytoplasm serve`.
+'''
+
 import os, cytoplasm, sys
 
 # make this work in either Python 2.x or 3.x
@@ -9,6 +13,8 @@ else:
 # keep track of when things were last built in this global variable
 most_recent_time = 0
 
+# does some beginning things and returns the handler to use;
+# you should give it a boolean meaning whether you want it to rebuild or not.
 def handler(rebuild):
     # build once first...
     cytoplasm.build()

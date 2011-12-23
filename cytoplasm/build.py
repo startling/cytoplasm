@@ -1,3 +1,7 @@
+'''
+These are all the functions that are used when you `cytoplasm build`.
+'''
+
 import os, shutil
 from . import errors, interpreters, configuration
 from .controllers import controllerclass

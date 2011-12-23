@@ -1,4 +1,7 @@
-# This is a default configuration file, that will be imported before the user's configuration
+'''
+This is a default configuration file, that should be imported in the user's configuration
+'''
+
 import os, imp, sys
 from . import controllers
 
