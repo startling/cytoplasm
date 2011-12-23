@@ -15,7 +15,7 @@ most_recent_time = 0
 
 # does some beginning things and returns the handler to use;
 # you should give it a boolean meaning whether you want it to rebuild or not.
-def handler(rebuild):
+def initialize(rebuild):
     # build once first...
     cytoplasm.build()
     # and save the most recent time

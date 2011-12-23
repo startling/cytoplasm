@@ -25,7 +25,7 @@ def serve_site(port, rebuild, **args):
     else:
         from BaseHTTPServer import HTTPServer
     # get the handler form cytoplasm.server, according to whether rebuild is true or false
-    handler = cytoplasm.server.handler(rebuild)
+    handler = cytoplasm.server.initialize(rebuild)
     # make a server with the handler and the port
     httpd = HTTPServer(('', port), handler)
     while True:
