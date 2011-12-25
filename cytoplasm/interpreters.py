@@ -2,8 +2,8 @@
 These are some utilites used when writing and handling interpreters.
 '''
 
-from . import configuration
-from .errors import InterpreterError
+from cytoplasm import configuration
+from cytoplasm.errors import InterpreterError
 
 def SaveReturned(fn):
     '''Some potential interpreters, like Mako, don't give you an easy way to save to a destination.

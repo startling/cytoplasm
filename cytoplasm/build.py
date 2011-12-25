@@ -3,8 +3,8 @@ These are all the functions that are used when you `cytoplasm build`.
 '''
 
 import os, shutil
-from . import errors, interpreters, configuration
-from .controllers import controllerclass
+from cytoplasm import errors, interpreters, configuration
+from cytoplasm.controllers import controllerclass
 
 def copy_over(config):
     "Copy the files not beginning with '_' to the site directory"

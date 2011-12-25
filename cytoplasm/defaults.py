@@ -3,7 +3,7 @@ This is a default configuration file, that should be imported in the user's conf
 '''
 
 import os, imp, sys
-from . import controllers
+from cytoplasm import controllers
 
 # Specify the build directory, where the built site will be copied to
 build_dir = "_build"
