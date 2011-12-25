@@ -2,6 +2,7 @@
 These are some utilites used when writing and handling interpreters.
 '''
 
+from . import configuration
 from .errors import InterpreterError
 
 def SaveReturned(fn):
@@ -21,7 +22,7 @@ def SaveReturned(fn):
 
 def interpret(file, destination, **kwargs):
     "Interpret a file with an interpreter according to its suffix."
-    from .configuration import interpreters
+    interpreters = configuration.get_config().interpreters
     for ending in interpreters.keys():
         # if the file has a suffix that matches any of the interpreters,
         # parse that file with that interpreter
