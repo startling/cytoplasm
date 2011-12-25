@@ -18,4 +18,4 @@ def get_config():
         import _config
         return _config
     else:
-        raise CytoplasmError("You don't seem to have a configuration file at '_config.py'.")
+        raise CytoplasmError("You don't seem to have a configuration file at '%s'." %(source_dir))
