@@ -28,7 +28,9 @@ def copy_over(config):
         # copy all the directories that don't start with "." or "_" completely.
         shutil.copytree(dir, "%s/%s" %(config.build_dir, dir))
 
-def build():
+def build(dir="."):
+    # Set the directory in cytoplasm.configuration, so everything gets the same configuration.
+    configuration.source_dir = dir
     # Get the configuration file...
     config = configuration.get_config()
     # Create the build directory, if it doesn't exist
