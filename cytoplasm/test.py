@@ -39,9 +39,28 @@ class Base(object):
         # check that the build directory is, in fact, a directory
         assert os.path.isdir(self.build_dir)
 
+    def copy_html_test(self):
+        "Test whether building a cytoplasm site correctly copies over the uninterpreted files."
+        # a filter to tell whether files are html files and are not configuration files.
+        filter = lambda x: x.endswith(".html") and not x.startswith("_")
+        # the html files in the source directory:
+        in_source_dir = [file for file in self.directory if filter(file)]
+        # the html files in the build dir:
+        in_build_dir = [file for file in self.build_dir if filter(file)]
+        # If nothing bad has happened, both of these lists should be equal.
+        assert in_source_dir == in_build_dir
+        # Furthermore, the contents of each of these files should be the same.
+        for source_file, built_file in zip(in_source_dir, in_build_dir):
+            # open each of these files from their respective directories
+            source_file = open(os.path.join(self.directory, source_file))
+            built_file = open(os.path.join(self.build_dir, built_file))
+            # assert that their contents are the same
+            assert source_file.read() == built_file.read()
+            # and then close each file
+            source_file.close()
+            built_file.close()
+
 class TestEmpty(Base):
     "Test the empty site."
     def __init__(self):
         Base.__init__(self, os.path.join(examples_directory, "empty"))
-
-
