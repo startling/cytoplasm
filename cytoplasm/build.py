@@ -30,7 +30,7 @@ def copy_over(config):
 
 def build(dir="."):
     # Set the directory in cytoplasm.configuration, so everything gets the same configuration.
-    configuration.source_dir = dir
+    configuration.source_dir = os.path.join(os.getcwd(), dir)
     # Get the configuration file...
     config = configuration.get_config()
     # save the current working directory, so we can return to it later.
