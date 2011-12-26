@@ -60,7 +60,17 @@ class Base(object):
             source_file.close()
             built_file.close()
 
+# The classes for different example sites:
+# I'd love for this to be generator that acts as a class factory, but I can't even find if I can do
+# it in nose. Sigh.
+
 class TestEmpty(Base):
     "Test the empty site."
     def __init__(self):
         Base.__init__(self, os.path.join(examples_directory, "empty"))
+
+class TestSomeHTML(Base):
+    "Test the somehtml example site."
+    def __init__(self):
+        Base.__init__(self, os.path.join(examples_directory, "somehtml"))
+
