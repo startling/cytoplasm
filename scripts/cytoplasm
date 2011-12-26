@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import argparse, sys, os
+import argparse, sys, os, imp
 
 def build_site(dir, **args):
     "This is what will be called when the user runs `cytoplasm build`"
@@ -20,6 +20,16 @@ def serve_site(port, rebuild, **args):
     "This is the function called when you run `cytoplasm serve`: serve the site in the build_dir."
     import cytoplasm.server
     cytoplasm.server.serve(port, rebuild)
+
+def test_cytoplasm(**args):
+    "This is the function called when you run `cytoplasm test`; test"
+    import nose
+    # Get the package directory where Cytoplasm lives
+    _, cytoplasm_directory, _ = imp.find_module("cytoplasm")
+    # Change directory to there; this is silly but I can't figure out how else to do it.
+    os.chdir(cytoplasm_directory)
+    # run the nose tests.
+    nose.run()
 
 class Parser(argparse.ArgumentParser):
     "A custom parser class with more helpful error messages."
@@ -50,6 +60,10 @@ serve.add_argument("port", type=int, help="The port to serve on; defaults to 808
         nargs="?", default=8080)
 serve.add_argument('-r', '--rebuild', help="Re-build the site automatically when changes are made.",
         action="store_true")
+# test subparser
+serve = subparsers.add_parser('test',
+        help="Test Cytoplasm with the built-in tests. (Requires nose).")
+serve.set_defaults(func=test_cytoplasm)
 # Parse the arguments from the command line.
 args = parser.parse_args()
 # run the functions associated with the arguments.
