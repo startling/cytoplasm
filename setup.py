@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name = "Cytoplasm",
-    version = "0.02",
+    version = "0.03",
     author = "startling",
     author_email = "tdixon51793@gmail.com",
     url = "http://cytoplasm.somethingsido.com",
