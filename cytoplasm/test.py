@@ -1,6 +1,8 @@
-import os, imp, shutil
+import os, imp, shutil, urllib2
+from multiprocessing import Process
 import nose
 import cytoplasm
+from cytoplasm import server
 '''
 A nose tests suite for Cytoplasm. 
 Run these by going into the cytoplasm package directory and running `nosetests`.
@@ -73,4 +75,24 @@ class TestSomeHTML(Base):
     "Test the somehtml example site."
     def __init__(self):
         Base.__init__(self, os.path.join(examples_directory, "somehtml"))
+    
+    def server_test(self):
+        "Test whether `cytoplasm serve` works."
+        # change directory to the source directory of the site; the server can only serve when in
+        # the source directory.
+        os.chdir(self.directory)
+        # start a process for the server (don't reload for now.)
+        server = Process(target=cytoplasm.server.serve, args=(8092, False),)
+        server.daemon = True
+        server.start()
+        # for each of the html files in the build directory...
+        for file in [file for file in os.listdir(self.build_dir) if file.endswith(".html")]:
+            # Make an http request to the server and get the response.
+            req = urllib2.Request("http://localhost:8092/%s" %(file))
+            response = urllib2.urlopen(req)
+            # assert that the contents of the http response are the same as the html file that it
+            # should correspond too.
+            assert response.read() == open(os.path.join(self.build_dir, file)).read()
+        # kill the server
+        server.terminate()
 
