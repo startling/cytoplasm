@@ -12,8 +12,9 @@ def get_config():
     # If the user has a file called _config.py, import that and return the module.
     # The user's _config.py should "from cytoplasm.defaults import *" if they want to use
     # some of the defaults.
-    if os.path.exists(os.path.join(source_dir, "_config.py")):
-        imp.load_source("_config", "_config.py")
+    config_file = os.path.join(source_dir, "_config.py")
+    if os.path.exists(config_file):
+        imp.load_source("_config", config_file)
         import _config
         return _config
     else:
