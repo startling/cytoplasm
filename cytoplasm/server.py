@@ -4,9 +4,6 @@ These are the things that are used when you `cytoplasm serve`.
 
 import os, cytoplasm, sys
 
-# get the configuration from cytoplasm.configuration
-config = cytoplasm.configuration.get_config()
-
 # make this work in either Python 2.x or 3.x
 if sys.version_info.major >= 3:
     from http.server import SimpleHTTPRequestHandler, HTTPServer
@@ -26,7 +23,7 @@ def initialize(rebuild):
     global most_recent_time
     most_recent_time = most_recent(".")
     # change to the build directory, where things are to be served from.
-    os.chdir(config.build_dir)
+    os.chdir(cytoplasm.configuration.get_config().build_dir)
     if rebuild:
         # if rebuild is true, return the RebuildHandler
         return RebuildHandler
@@ -36,7 +33,7 @@ def initialize(rebuild):
 
 def most_recent(directory):
     "Determine the most recent modified time in the source directory, ignoring dotfiles and _build."
-    build_dir = config.build_dir
+    build_dir = cytoplasm.configuration.get_config().build_dir
     # get the candidate files:
     files = [f for f in os.listdir(directory) if f != build_dir and not f.startswith(".")]
     # get each of their times
