@@ -9,9 +9,10 @@ config = cytoplasm.configuration.get_config()
 
 # make this work in either Python 2.x or 3.x
 if sys.version_info.major >= 3:
-    from http.server import SimpleHTTPRequestHandler
+    from http.server import SimpleHTTPRequestHandler, HTTPServer
 else:
     from SimpleHTTPServer import SimpleHTTPRequestHandler
+    from BaseHTTPServer import HTTPServer
 
 # keep track of when things were last built in this global variable
 most_recent_time = 0
@@ -68,5 +69,14 @@ class RebuildHandler(SimpleHTTPRequestHandler):
             self.copyfile(f, self.wfile)
             # and then close it.
             f.close()
+
+def serve(port, rebuild):
+    "Serve the Cytoplasm site."
+    # get the handler according to whether rebuild is true or false.
+    handler = initialize(rebuild)
+    # make a server with the handler and the port
+    httpd = HTTPServer(('', port), handler)
+    while True:
+        httpd.handle_request()
 
 
