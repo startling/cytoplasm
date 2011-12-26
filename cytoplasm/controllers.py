@@ -11,7 +11,7 @@ def controllerclass(name):
         controller = imp.load_module(name, fp, pathname, description)
         return controller.info["class"]
     finally:
-        if fp != None: fp.close
+        if fp != None: fp.close()
 
 class Controller(object):
     "Controllers take data from some files, do stuff with it, and write it to the build directory."
