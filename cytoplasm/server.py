@@ -60,11 +60,8 @@ class RebuildHandler(SimpleHTTPRequestHandler):
             if new_recent > most_recent_time:
                 # update most_recent_time
                 most_recent_time = new_recent
-                # The following is an ugly hack:
-                # Move up one directory to the source directory
-                os.chdir("..")
                 # Build the site from the source directory
-                cytoplasm.build()
+                cytoplasm.build("..")
                 # and move back down to the build directory to continue serving.
                 os.chdir(config.build_dir)
             # Copy the file to self.wfile...
