@@ -1,6 +1,6 @@
 import os, imp, shutil, urllib2
 from multiprocessing import Process
-import nose
+import nose, mako
 import cytoplasm
 from cytoplasm import server
 '''
@@ -76,6 +76,17 @@ class TestSomeHTML(Base):
     def __init__(self):
         Base.__init__(self, os.path.join(examples_directory, "somehtml"))
     
+    def interpreter_test(self):
+        "Test that the interpreters basically work."
+        # I'm not going to do any content testing, because that's mako's job.
+        # Still, I'm going to test the files are copied over and interpreted.
+        # for each .mako file in the source directory.
+        for file in [file for file in os.listdir(self.directory) if file.endswith(".mako")]:
+            # the corresponding file will be the same, but without the last dotted section.
+            corresponding = ".".join(file.split(".")[:-1])
+            # assert that there exists a corresponding file in the build directory:
+            assert os.path.exists(os.path.join(self.build_dir, corresponding))
+
     def server_test(self):
         "Test whether `cytoplasm serve` works."
         # change directory to the source directory of the site; the server can only serve when in
