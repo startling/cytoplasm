@@ -33,6 +33,10 @@ def build(dir="."):
     configuration.source_dir = dir
     # Get the configuration file...
     config = configuration.get_config()
+    # save the current working directory, so we can return to it later.
+    oldwd = os.getcwd()
+    # and then change directories, to the source directory.
+    os.chdir(configuration.source_dir)
     # Create the build directory, if it doesn't exist
     if not os.path.exists(config.build_dir):
         os.mkdir(config.build_dir)
@@ -42,4 +46,6 @@ def build(dir="."):
         controller_object = controllerclass(controller)(*arguments)
         # call the controller object 
         controller_object()
+    # change back to the old directory.
+    os.chdir(oldwd)
 
