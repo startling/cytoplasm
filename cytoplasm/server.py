@@ -60,8 +60,6 @@ class RebuildHandler(SimpleHTTPRequestHandler):
                 most_recent_time = new_recent
                 # Build the site from the source directory
                 cytoplasm.build("..")
-                # and move back down to the build directory to continue serving.
-                os.chdir(config.build_dir)
             # Copy the file to self.wfile...
             self.copyfile(f, self.wfile)
             # and then close it.
