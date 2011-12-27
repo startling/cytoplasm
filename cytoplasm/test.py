@@ -1,7 +1,7 @@
 import os, imp, shutil
 import nose, mako
 import cytoplasm
-from cytoplasm import server
+from cytoplasm import server, configuration
 '''
 A nose tests suite for Cytoplasm. 
 Run these by going into the cytoplasm package directory and running `nosetests`.
@@ -19,6 +19,7 @@ class Base(object):
     def __init__(self, directory):
         self.directory = directory
         self.build_dir = os.path.join(directory, "_build")
+        self.configuration = configuration.get_config(directory)
     
     def delete_build_dir(self):
         "Delete the build directory."
@@ -91,5 +92,9 @@ class TestControllers(Base):
     def __init__(self):
         Base.__init__(self, os.path.join(examples_directory, "controllers"))
 
-
+    def basic_controller_test(self):
+        # for each controller configured:
+        for controller, [source_dir, build_dir] in self.configuration.controllers:
+            # make sure the build directories were created.
+            assert os.path.exists(os.path.join(self.directory, build_dir))
 
