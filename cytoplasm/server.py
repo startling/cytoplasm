@@ -14,22 +14,22 @@ else:
 # keep track of when things were last built in this global variable
 most_recent_time = 0
 
-# does some beginning things and returns the handler to use;
-# you should give it a boolean meaning whether you want it to rebuild or not.
-def initialize(rebuild):
-    # build once first...
-    cytoplasm.build()
-    # and save the most recent time
+def serve(port, rebuild, event=None):
+    "Serve the Cytoplasm site."
+    # keep track of the most recently modified time in global variable most_recent_time
     global most_recent_time
     most_recent_time = most_recent(".")
+    # rebuild the site first.
+    cytoplasm.build()
     # change to the build directory, where things are to be served from.
     os.chdir(cytoplasm.configuration.get_config().build_dir)
-    if rebuild:
-        # if rebuild is true, return the RebuildHandler
-        return RebuildHandler
-    else:
-        # otherwise, just return the SimpleHTTPRequestHandler
-        return SimpleHTTPRequestHandler
+    # use either SimpleHTTPRequestHandler or RebuildHandler, depending on whether rebuild is True.
+    if rebuild: handler = RebuildHandler
+    else: handler = SimpleHTTPRequestHandler
+    # make a server with the handler and the port
+    httpd = HTTPServer(('', port), handler)
+    # serve!
+    httpd.serve_forever()
 
 def most_recent(directory):
     "Determine the most recent modified time in the source directory, ignoring dotfiles and _build."
@@ -64,14 +64,4 @@ class RebuildHandler(SimpleHTTPRequestHandler):
             self.copyfile(f, self.wfile)
             # and then close it.
             f.close()
-
-def serve(port, rebuild, event=None):
-    "Serve the Cytoplasm site."
-    # get the handler according to whether rebuild is true or false.
-    handler = initialize(rebuild)
-    # make a server with the handler and the port
-    httpd = HTTPServer(('', port), handler)
-    while True:
-        httpd.handle_request()
-
 
