@@ -93,8 +93,8 @@ class TestSomeHTML(Base):
         os.chdir(self.directory)
         # an event that the server will set when it's done initializing:
         event = multiprocessing.Event()
-        # start a process for the server (don't reload for now.)
-        server = multiprocessing.Process(target=cytoplasm.server.serve, args=(8092, False, event),)
+        # start a process for the server (and give it a True for reloading)
+        server = multiprocessing.Process(target=cytoplasm.server.serve, args=(8092, True, event),)
         server.daemon = True
         server.start()
         # wait for the server to initialize so as not to create a race condition:
