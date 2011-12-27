@@ -98,3 +98,14 @@ class TestControllers(Base):
             # make sure the build directories were created.
             assert os.path.exists(os.path.join(self.directory, build_dir))
 
+    def copier_controller_test(self):
+        # get the controllers whose names are "copier"
+        copiers = [c for c in self.configuration.controllers if c[0] == "copier"]
+        for _, [source_dir, build_dir] in copiers:
+            # for each of the files in the build directory...
+            for file in os.listdir(os.path.join(self.directory, source_dir)):
+                source_file = open(os.path.join(self.directory, source_dir, file))
+                built_file = open(os.path.join(self.directory, source_dir, file))
+                # check that they were copied correctly.
+                assert source_file.read() == built_file.read()
+
