@@ -67,14 +67,10 @@ class RebuildHandler(SimpleHTTPRequestHandler):
 
 def serve(port, rebuild, event=None):
     "Serve the Cytoplasm site."
-    # (optionally take an event argument that will be set when the server is done initializing,
-    # for use in testing)
     # get the handler according to whether rebuild is true or false.
     handler = initialize(rebuild)
     # make a server with the handler and the port
     httpd = HTTPServer(('', port), handler)
-    # done initializing; set the event.
-    if event != None: event.set()
     while True:
         httpd.handle_request()
 
