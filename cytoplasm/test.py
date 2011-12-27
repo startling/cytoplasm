@@ -1,5 +1,5 @@
-import os, imp, shutil, urllib2
-import nose, mako, multiprocessing
+import os, imp, shutil
+import nose, mako
 import cytoplasm
 from cytoplasm import server
 '''
@@ -85,37 +85,4 @@ class TestSomeHTML(Base):
             corresponding = ".".join(file.split(".")[:-1])
             # assert that there exists a corresponding file in the build directory:
             assert os.path.exists(os.path.join(self.build_dir, corresponding))
-
-    def server_check(self, rebuild=False):
-        "Test whether the server works when rebuild=%s" %(str(rebuild))
-        # change directory to the source directory of the site; the server can only serve when in
-        # the source directory.
-        os.chdir(self.directory)
-        # an event that the server will set when it's done initializing:
-        event = multiprocessing.Event()
-        # start a process for the server (and give it a True for reloading)
-        server = multiprocessing.Process(target=cytoplasm.server.serve, args=(8092, True, event),)
-        server.daemon = True
-        server.start()
-        # wait for the server to initialize so as not to create a race condition:
-        event.wait()
-        # for each of the html files in the build directory...
-        for file in [file for file in os.listdir(self.build_dir) if file.endswith(".html")]:
-            # Make an http request to the server and get the response.
-            req = urllib2.Request("http://localhost:8092/%s" %(file))
-            response = urllib2.urlopen(req)
-            # assert that the contents of the http response are the same as the html file that it
-            # should correspond too.
-            assert response.read() == open(os.path.join(self.build_dir, file)).read()
-        # kill the server
-        server.terminate()
-
-    def test_normal_server(self):
-        "Test whether `cytoplasm serve` works."
-        self.server_check()
-
-    def test_rebuilding_server(self):
-        "Test whether `cytoplasm serve -r` works."
-        self.server_check(rebuild=True)
-
 
