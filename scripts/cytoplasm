@@ -52,7 +52,7 @@ build.add_argument("dir", type=str, help="The source directory of your site; def
 # "init" subparse
 init = subparsers.add_parser('init', help='Clone a repository to work from (requires Git).')
 init.set_defaults(func=init_site)
-init.add_argument('site', choices=["bare", "cytoplasm"], help="The site you want to clone.")
+init.add_argument('site', choices=["bare", "cytoplasm-site"], help="The site you want to clone.")
 # serve subparser
 serve = subparsers.add_parser('serve', help="Serve your site with Python's built-in server.")
 serve.set_defaults(func=serve_site)
