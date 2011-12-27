@@ -1,6 +1,5 @@
 import os, imp, shutil, urllib2
-from multiprocessing import Process
-import nose, mako
+import nose, mako, multiprocessing
 import cytoplasm
 from cytoplasm import server
 '''
@@ -92,10 +91,14 @@ class TestSomeHTML(Base):
         # change directory to the source directory of the site; the server can only serve when in
         # the source directory.
         os.chdir(self.directory)
+        # an event that the server will set when it's done initializing:
+        event = multiprocessing.Event()
         # start a process for the server (don't reload for now.)
-        server = Process(target=cytoplasm.server.serve, args=(8092, False),)
+        server = multiprocessing.Process(target=cytoplasm.server.serve, args=(8092, False, event),)
         server.daemon = True
         server.start()
+        # wait for the server to initialize so as not to create a race condition:
+        event.wait()
         # for each of the html files in the build directory...
         for file in [file for file in os.listdir(self.build_dir) if file.endswith(".html")]:
             # Make an http request to the server and get the response.
