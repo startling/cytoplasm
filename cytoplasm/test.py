@@ -1,12 +1,13 @@
-import os, imp, shutil
-import nose, mako
-import cytoplasm
-from cytoplasm import server, configuration
 '''
 A nose tests suite for Cytoplasm. 
 Run these by going into the cytoplasm package directory and running `nosetests`.
 These work on the example sites in `cytoplasm/tests`.
 '''
+
+import os, imp, shutil
+import nose, mako
+import cytoplasm
+from cytoplasm import server, configuration
 
 # Figure out where the examples are, in the cytoplasm package.
 _, cytoplasm_directory, _ = imp.find_module("cytoplasm")

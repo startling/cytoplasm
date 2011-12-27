@@ -2,6 +2,7 @@
 This module imports everything from the user's `_config.py` into its namespace.
 So to get configuration of the current working directory, `import cytoplasm.configuration`.
 '''
+
 import os, imp
 from cytoplasm.errors import CytoplasmError
 
