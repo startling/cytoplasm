@@ -86,3 +86,10 @@ class TestSomeHTML(Base):
             # assert that there exists a corresponding file in the build directory:
             assert os.path.exists(os.path.join(self.build_dir, corresponding))
 
+class TestControllers(Base):
+    "Test the controllers example site."
+    def __init__(self):
+        Base.__init__(self, os.path.join(examples_directory, "controllers"))
+
+
+
