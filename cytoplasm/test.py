@@ -86,8 +86,8 @@ class TestSomeHTML(Base):
             # assert that there exists a corresponding file in the build directory:
             assert os.path.exists(os.path.join(self.build_dir, corresponding))
 
-    def server_test(self):
-        "Test whether `cytoplasm serve` works."
+    def server_check(self, rebuild=False):
+        "Test whether the server works when rebuild=%s" %(str(rebuild))
         # change directory to the source directory of the site; the server can only serve when in
         # the source directory.
         os.chdir(self.directory)
@@ -109,4 +109,13 @@ class TestSomeHTML(Base):
             assert response.read() == open(os.path.join(self.build_dir, file)).read()
         # kill the server
         server.terminate()
+
+    def test_normal_server(self):
+        "Test whether `cytoplasm serve` works."
+        self.server_check()
+
+    def test_rebuilding_server(self):
+        "Test whether `cytoplasm serve -r` works."
+        self.server_check(rebuild=True)
+
 
