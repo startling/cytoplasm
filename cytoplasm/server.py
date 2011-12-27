@@ -43,25 +43,20 @@ def most_recent(directory):
 
 
 class RebuildHandler(SimpleHTTPRequestHandler):
-    def do_GET(self):
-        "Send a GET request, and, if anything has changed, rebuild the site."
-        # overwrite the do_GET method in SimpleHTTPRequestHandler with this.
-        # it's mostly the same except for the 'build' part here.
+    def handle(self):
+        "Handle a request and, if anything has changed, rebuild the site."
+        # overwrite the handle method in SimpleHTTPRequestHandler with this.
         # declare most_recent_time global; we'll be changing it later.
         global most_recent_time
-        f = self.send_head()
-        if f:
-            # figure out what the most recent time edited is in the source directory
-            new_recent = most_recent("..")
-            # only build the site if the new most recent is more recent than the old one,
-            # i.e. if one or more of the files has been edited.
-            if new_recent > most_recent_time:
-                # update most_recent_time
-                most_recent_time = new_recent
-                # Build the site from the source directory
-                cytoplasm.build("..")
-            # Copy the file to self.wfile...
-            self.copyfile(f, self.wfile)
-            # and then close it.
-            f.close()
+        # figure out what the most recent time edited is in the source directory
+        new_recent = most_recent("..")
+        # only build the site if the new most recent is more recent than the old one,
+        # i.e. if one or more of the files has been edited.
+        if new_recent > most_recent_time:
+            # update most_recent_time
+            most_recent_time = new_recent
+            # Build the site from the source directory
+            cytoplasm.build("..")
+        # Call SimpleHTTPRequestHandler.handle(), so it can do stuff there too.
+        SimpleHTTPRequestHandler.handle(self)
 
