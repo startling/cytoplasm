@@ -27,3 +27,10 @@ class Controller(object):
     def __call__(self):
         # do whatever needs to be done here...
         pass
+
+    def template(self, name):
+        "Given a name, return the name of the file in the templates directory that fits it."
+        # list of files that fit:
+        files = [f for f in os.listdir(self.templates_directory) if f.startswith(name + ".")]
+        # return the first file that matches, with the directory prepended.
+        return os.path.join(self.templates_directory, files[0])
