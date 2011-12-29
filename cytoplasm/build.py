@@ -22,14 +22,14 @@ def copy_over(config):
         else:
             destination = file
         # and pass the origin and destination to interpreters.interpret.
-        interpreters.interpret(file, "%s/%s" %(config.build_dir, destination))
+        interpreters.interpret(file, os.path.join(config.build_dir, destination))
     directories = [file for file in to_copy if os.path.isdir(file)]
     for dir in directories:
-        if os.path.exists("%s/%s" %(config.build_dir, dir)):
+        if os.path.exists(os.path.join(config.build_dir, dir)):
             # if the directory exists, delete it.
-            shutil.rmtree("%s/%s" %(config.build_dir, dir))
+            shutil.rmtree(os.path.join(config.build_dir, dir))
         # copy all the directories that don't start with "." or "_" completely.
-        shutil.copytree(dir, "%s/%s" %(config.build_dir, dir))
+        shutil.copytree(dir, os.path.join(config.build_dir, dir))
 
 def build(dir="."):
     # Set the directory in cytoplasm.configuration, so everything gets the same configuration.
