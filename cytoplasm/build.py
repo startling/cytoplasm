@@ -13,13 +13,16 @@ def copy_over(config):
     to_copy = [file for file in os.listdir(".") if not file.startswith(("_", "."))]
     files = [file for file in to_copy if not os.path.isdir(file)]
     for file in files:
-        # first, try to interpret each of these files with one of the interpreters
-        # if none of the interpreters match, it returns False
-        # the destination, if interpreted, should be the filename without that last suffix
-        destination = file.rsplit('.', 1)[0]
-        if not interpreters.interpret(file, "%s/%s" %(config.build_dir, destination)):
-            # otherwise, simply copy the file over
-            shutil.copy2(file, config.build_dir)
+        # get the last suffix:
+        suffix = file.split(".")[-1]
+        # if the suffix is in interpreters.keys() the destination is everything but that last suffix
+        if suffix in config.interpreters.keys():
+            destination = ".".join(file.split(".")[:-1])
+        # otherwise, it's the whole thing.
+        else:
+            destination = file
+        # and pass the origin and destination to interpreters.interpret.
+        interpreters.interpret(file, "%s/%s" %(config.build_dir, destination))
     directories = [file for file in to_copy if os.path.isdir(file)]
     for dir in directories:
         if os.path.exists("%s/%s" %(config.build_dir, dir)):
