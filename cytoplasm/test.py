@@ -1,11 +1,10 @@
 '''
-A nose tests suite for Cytoplasm. 
-Run these by going into the cytoplasm package directory and running `nosetests`.
+A unittest test suite for Cytoplasm. 
 These work on the example sites in `cytoplasm/tests`.
 '''
 
-import os, imp, shutil
-import nose, mako
+import os, imp, shutil, unittest
+import mako
 import cytoplasm
 from cytoplasm import server, configuration
 
@@ -14,35 +13,36 @@ _, cytoplasm_directory, _ = imp.find_module("cytoplasm")
 # this is the directory
 examples_directory = os.path.join(cytoplasm_directory, "tests")
 
-# Infrastructure to use on the generalized tests.
-class Base(object):
-    "This is the base that all the test classes will inherit from."
-    def __init__(self, directory):
-        self.directory = directory
-        self.build_dir = os.path.join(directory, "_build")
-        self.configuration = configuration.get_config(directory)
+class Base(unittest.TestCase):
+    "A base for testing all of the example sites. Default to the 'empty' example site."
+    def setUp(self, directory="empty"):
+        "Figure out the directories and build the site."
+        self.directory = os.path.join(examples_directory, directory)
+        # get the site's configuration from the directory specified.
+        self.configuration = configuration.get_config(self.directory)
+        # get the build directory from the site's configuration
+        self.build_dir = os.path.join(self.directory, self.configuration.build_dir)
+        # delete the build directory, just in case there's something there.
+        self.delete_build_dir()
+        # and, finally, build the site
+        cytoplasm.build(self.directory)   
     
     def delete_build_dir(self):
         "Delete the build directory."
         if os.path.exists(self.build_dir): shutil.rmtree(self.build_dir)
-
-    def setup(self):
-        "Delete all the files in the build directory already and build the site."
-        self.delete_build_dir()
-        cytoplasm.build(self.directory)
-
-    def teardown(self):
+    
+    def tearDown(self):
         "Delete the build directory after all the tests are done."
         self.delete_build_dir()
 
-    def basic_test(self):
+    def test_basic(self):
         "Check for basic decency in a built cytoplasm site."
         # check that the build directory was created
         assert os.path.exists(self.build_dir)
         # check that the build directory is, in fact, a directory
         assert os.path.isdir(self.build_dir)
 
-    def copy_html_test(self):
+    def test_copy_html(self):
         "Test whether building a cytoplasm site correctly copies over the uninterpreted files."
         # a filter to tell whether files are html files and are not configuration files.
         filter = lambda x: x.endswith(".html") and not x.startswith("_")
@@ -63,21 +63,12 @@ class Base(object):
             source_file.close()
             built_file.close()
 
-# The classes for different example sites:
-# I'd love for this to be generator that acts as a class factory, but I can't even find if I can do
-# it in nose. Sigh.
-
-class TestEmpty(Base):
-    "Test the empty site."
-    def __init__(self):
-        Base.__init__(self, os.path.join(examples_directory, "empty"))
-
 class TestSomeHTML(Base):
     "Test the somehtml example site."
-    def __init__(self):
-        Base.__init__(self, os.path.join(examples_directory, "somehtml"))
+    def setUp(self):
+        Base.setUp(self, os.path.join(examples_directory, "somehtml"))
     
-    def interpreter_test(self):
+    def test_interpreter(self):
         "Test that the interpreters basically work."
         # I'm not going to do any content testing, because that's mako's job.
         # Still, I'm going to test the files are copied over and interpreted.
@@ -90,16 +81,16 @@ class TestSomeHTML(Base):
 
 class TestControllers(Base):
     "Test the controllers example site."
-    def __init__(self):
-        Base.__init__(self, os.path.join(examples_directory, "controllers"))
+    def setUp(self):
+        Base.setUp(self, os.path.join(examples_directory, "controllers"))
 
-    def basic_controller_test(self):
+    def test_basic_controller(self):
         # for each controller configured:
         for controller, [source_dir, build_dir] in self.configuration.controllers:
             # make sure the build directories were created.
             assert os.path.exists(os.path.join(self.directory, build_dir))
 
-    def copier_controller_test(self):
+    def test_copier_controller(self):
         # get the controllers whose names are "copier"
         copiers = [c for c in self.configuration.controllers if c[0] == "copier"]
         for _, [source_dir, build_dir] in copiers:
@@ -110,3 +101,5 @@ class TestControllers(Base):
                 # check that they were copied correctly.
                 assert source_file.read() == built_file.read()
 
+if __name__ == '__main__':
+    unittest.main()
