@@ -6,6 +6,17 @@ import shutil
 from cytoplasm import configuration
 from cytoplasm.errors import InterpreterError
 
+def interpreted_filename(file):
+    "Intelligently return the interpreted filename of a file."
+    # get the last suffix:
+    suffix = file.split(".")[-1]
+    # if the suffix is in interpreters.keys() the destination is everything but that last suffix
+    if suffix in configuration.get_config().interpreters.keys():
+        return ".".join(file.split(".")[:-1])
+    # otherwise, it's the whole thing.
+    else:
+        return file
+
 def SaveReturned(fn):
     '''Some potential interpreters, like Mako, don't give you an easy way to save to a destination.
     In these cases, simply use this function as a decorater.'''
