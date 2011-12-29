@@ -21,15 +21,18 @@ def SaveReturned(fn):
         f.close()
     return InterpreterWithSave
 
+@SaveReturned
+def default_interpreter(source, **kwargs):
+    f = open(source)
+    source_string = f.read()
+    f.close()
+    return source_string
+
 def interpret(file, destination, **kwargs):
     "Interpret a file with an interpreter according to its suffix."
     # get the list of interpreters from the configuration
     interpreters = configuration.get_config().interpreters
     # figure out the suffix of the file, to use to determine which interpreter to use
-    ending = ".".join(file.split(".")[:-1])
-    try:
-        interpreters.get(ending, shutil.copyfile)(file, destination, **kwargs)
-    except Exception as exception:
-        # if the interpreter chokes, raise an InterpreterError with some useful information.
-        raise InterpreterError("%s on file '%s': %s" %(ending, file, exception))
+    ending = file.split(".")[-1]
+    interpreters.get(ending, default_interpreter)(file, destination, **kwargs)
 
