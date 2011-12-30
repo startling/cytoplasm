@@ -55,8 +55,8 @@ class Base(unittest.TestCase):
         # Furthermore, the contents of each of these files should be the same.
         for source_path in in_source_dir:
             # open each of these files from their respective directories
-            source_file = open(os.path.join(self.directory, source_path))
-            built_file = open(os.path.join(self.build_dir, source_path))
+            source_file = open(os.path.join(self.directory, source_path), "rb")
+            built_file = open(os.path.join(self.build_dir, source_path), "rb")
             # assert that their contents are the same
             self.assertEqual(source_file.read(), built_file.read())
             # and then close each file
@@ -96,8 +96,8 @@ class TestControllers(Base):
         for _, [source_dir, build_dir] in copiers:
             # for each of the files in the build directory...
             for file in os.listdir(os.path.join(self.directory, source_dir)):
-                source_file = open(os.path.join(self.directory, source_dir, file))
-                built_file = open(os.path.join(self.directory, source_dir, file))
+                source_file = open(os.path.join(self.directory, source_dir, file), "rb")
+                built_file = open(os.path.join(self.directory, source_dir, file), "rb")
                 # check that they were copied correctly.
                 self.assertEqual(source_file.read(), built_file.read())
 
