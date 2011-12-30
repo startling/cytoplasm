@@ -32,12 +32,16 @@ def SaveReturned(fn):
         f.close()
     return InterpreterWithSave
 
-@SaveReturned
-def default_interpreter(source, **kwargs):
-    f = open(source)
-    source_string = f.read()
-    f.close()
-    return source_string
+def default_interpreter(source, destination, **kwargs):
+    "Copy from source to destination. Use this if no other interpreters match the file."
+    # if the destination is a string, treat it as a filename
+    if isinstance(destination, str):
+        shutil.copyfile(source, destination)
+    # otherwise, treat it as a file object.
+    else:
+        source_file = open(source)
+        shutil.copyfileobj(source_file, destination)
+        source_file.close()
 
 def interpret(file, destination, **kwargs):
     "Interpret a file with an interpreter according to its suffix."
