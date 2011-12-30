@@ -38,9 +38,9 @@ class Base(unittest.TestCase):
     def test_basic(self):
         "Check for basic decency in a built cytoplasm site."
         # check that the build directory was created
-        assert os.path.exists(self.build_dir)
+        self.assertTrue(os.path.exists(self.build_dir))
         # check that the build directory is, in fact, a directory
-        assert os.path.isdir(self.build_dir)
+        self.assertTrue(os.path.isdir(self.build_dir))
 
     def test_copy_html(self):
         "Test whether building a cytoplasm site correctly copies over the uninterpreted files."
@@ -51,14 +51,14 @@ class Base(unittest.TestCase):
         # the html files in the build dir:
         in_build_dir = [file for file in os.listdir(self.build_dir) if filter(file)]
         # If nothing bad has happenned, everything in in_source_dir should be in in_build_dir
-        assert set(in_source_dir) <= set(in_build_dir)
+        self.assertTrue(set(in_source_dir) <= set(in_build_dir))
         # Furthermore, the contents of each of these files should be the same.
         for source_path in in_source_dir:
             # open each of these files from their respective directories
             source_file = open(os.path.join(self.directory, source_path))
             built_file = open(os.path.join(self.build_dir, source_path))
             # assert that their contents are the same
-            assert source_file.read() == built_file.read(), zip(in_source_dir, in_build_dir)
+            self.assertEqual(source_file.read(), built_file.read())
             # and then close each file
             source_file.close()
             built_file.close()
@@ -77,7 +77,7 @@ class TestSomeHTML(Base):
             # the corresponding file will be the same, but without the last dotted section.
             corresponding = ".".join(file.split(".")[:-1])
             # assert that there exists a corresponding file in the build directory:
-            assert os.path.exists(os.path.join(self.build_dir, corresponding))
+            self.assertTrue(os.path.exists(os.path.join(self.build_dir, corresponding)))
 
 class TestControllers(Base):
     "Test the controllers example site."
@@ -88,7 +88,7 @@ class TestControllers(Base):
         # for each controller configured:
         for controller, [source_dir, build_dir] in self.configuration.controllers:
             # make sure the build directories were created.
-            assert os.path.exists(os.path.join(self.directory, build_dir))
+            self.assertTrue(os.path.exists(os.path.join(self.directory, build_dir)))
 
     def test_copier_controller(self):
         # get the controllers whose names are "copier"
@@ -99,7 +99,7 @@ class TestControllers(Base):
                 source_file = open(os.path.join(self.directory, source_dir, file))
                 built_file = open(os.path.join(self.directory, source_dir, file))
                 # check that they were copied correctly.
-                assert source_file.read() == built_file.read()
+                self.assertEqual(source_file.read(), built_file.read())
 
 if __name__ == '__main__':
     unittest.main()
