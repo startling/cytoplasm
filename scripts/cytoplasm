@@ -23,13 +23,11 @@ def serve_site(port, rebuild, **args):
 
 def test_cytoplasm(**args):
     "This is the function called when you run `cytoplasm test`; test"
-    import nose
-    # Get the package directory where Cytoplasm lives
-    _, cytoplasm_directory, _ = imp.find_module("cytoplasm")
-    # Change directory to there; this is silly but I can't figure out how else to do it.
-    os.chdir(cytoplasm_directory)
-    # run the nose tests.
-    nose.run()
+    import unittest
+    # load the the tests in `cytoplasm` that match `test*.py`.
+    all_tests = unittest.TestLoader().discover('cytoplasm', pattern='test*.py')
+    # and run them:
+    unittest.TextTestRunner().run(all_tests)
 
 class Parser(argparse.ArgumentParser):
     "A custom parser class with more helpful error messages."
