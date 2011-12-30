@@ -59,9 +59,9 @@ serve.add_argument("port", type=int, help="The port to serve on; defaults to 808
 serve.add_argument('-r', '--rebuild', help="Re-build the site automatically when changes are made.",
         action="store_true")
 # test subparser
-serve = subparsers.add_parser('test',
+test = subparsers.add_parser('test',
         help="Test Cytoplasm with the built-in tests. (Requires nose).")
-serve.set_defaults(func=test_cytoplasm)
+test.set_defaults(func=test_cytoplasm)
 # Parse the arguments from the command line.
 args = parser.parse_args()
 # run the functions associated with the arguments.
