@@ -15,9 +15,9 @@ examples_directory = os.path.join(cytoplasm_directory, "tests")
 
 class Base(unittest.TestCase):
     "A base for testing all of the example sites. Default to the 'empty' example site."
-    def setUp(self, directory="empty"):
+    def setUp(self, directory=os.path.join(examples_directory, "empty")):
         "Figure out the directories and build the site."
-        self.directory = os.path.join(examples_directory, directory)
+        self.directory = directory
         # get the site's configuration from the directory specified.
         self.configuration = configuration.get_config(self.directory)
         # get the build directory from the site's configuration
