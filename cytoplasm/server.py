@@ -56,6 +56,7 @@ class RebuildHandler(SimpleHTTPRequestHandler):
             # update most_recent_time
             most_recent_time = new_recent
             # Build the site from the source directory
+            print("Rebuilding your Cytoplasm site...")
             cytoplasm.build("..")
         # Call SimpleHTTPRequestHandler.handle(), so it can do stuff there too.
         SimpleHTTPRequestHandler.handle(self)
