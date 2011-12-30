@@ -19,11 +19,13 @@ def init_site(site, **args):
 def serve_site(port, rebuild, **args):
     "This is the function called when you run `cytoplasm serve`: serve the site in the build_dir."
     import cytoplasm.server
+    print("Serving your site on port %d..." %(port))
     cytoplasm.server.serve(port, rebuild)
 
 def test_cytoplasm(**args):
     "This is the function called when you run `cytoplasm test`; test"
     import unittest
+    print("Running Cytoplasm's unittests:")
     # load the the tests in `cytoplasm` that match `test*.py`.
     all_tests = unittest.TestLoader().discover('cytoplasm', pattern='test*.py')
     # and run them:
