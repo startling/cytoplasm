@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import argparse, sys, os, imp
 
+# This is the divider that's used for some subcommands.
+divider = "=" * 70
+
 def build_site(dir, **args):
     "This is what will be called when the user runs `cytoplasm build`"
     import cytoplasm
@@ -19,17 +22,21 @@ def init_site(site, **args):
 def serve_site(port, rebuild, **args):
     "This is the function called when you run `cytoplasm serve`: serve the site in the build_dir."
     import cytoplasm.server
+    print(divider)
     print("Serving your site on port %d..." %(port))
+    print(divider)
     cytoplasm.server.serve(port, rebuild)
 
 def test_cytoplasm(**args):
     "This is the function called when you run `cytoplasm test`; test"
     import unittest
+    print(divider)
     print("Running Cytoplasm's unittests:")
     # load the the tests in `cytoplasm` that match `test*.py`.
     all_tests = unittest.TestLoader().discover('cytoplasm', pattern='test*.py')
     # and run them:
     unittest.TextTestRunner().run(all_tests)
+    print(divider)
 
 class Parser(argparse.ArgumentParser):
     "A custom parser class with more helpful error messages."
