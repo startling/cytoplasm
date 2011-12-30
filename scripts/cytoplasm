@@ -27,7 +27,7 @@ def serve_site(port, rebuild, **args):
     print(divider)
     cytoplasm.server.serve(port, rebuild)
 
-def test_cytoplasm(**args):
+def test_cytoplasm(test_controllers, **args):
     "This is the function called when you run `cytoplasm test`; test"
     import unittest
     print(divider)
@@ -37,6 +37,15 @@ def test_cytoplasm(**args):
     # and run them:
     unittest.TextTestRunner().run(all_tests)
     print(divider)
+    # if the -c flag is specified, test all the controllers in the current directory:
+    if test_controllers:
+        for controller in os.listdir("_controllers"):
+            print(divider)
+            print("Testing the controller in '_controllers/%s':" %(controller))
+            controller_tests = unittest.TestLoader().discover(
+                    os.path.join("_controllers", controller), pattern='test*.py')
+            unittest.TextTestRunner().run(controller_tests)
+            print(divider)
 
 class Parser(argparse.ArgumentParser):
     "A custom parser class with more helpful error messages."
@@ -71,6 +80,8 @@ serve.add_argument('-r', '--rebuild', help="Re-build the site automatically when
 test = subparsers.add_parser('test',
         help="Test Cytoplasm with the built-in tests. (Requires nose).")
 test.set_defaults(func=test_cytoplasm)
+test.add_argument("-c", "--test-controllers", action="store_true",
+        help="Run tests for the controllers in this site directory.")
 # Parse the arguments from the command line.
 args = parser.parse_args()
 # run the functions associated with the arguments.
