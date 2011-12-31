@@ -100,6 +100,9 @@ class TestControllers(Base):
                 built_file = open(os.path.join(self.directory, source_dir, file), "rb")
                 # check that they were copied correctly.
                 self.assertEqual(source_file.read(), built_file.read())
+                # and then close them.
+                source_file.close()
+                built_file.close()
 
 if __name__ == '__main__':
     unittest.main()
