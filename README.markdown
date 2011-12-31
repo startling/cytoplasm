@@ -53,3 +53,5 @@ Cytoplasm comes with a built-in server for testing things locally. To use it, `c
 ### Develop
 For development, you should probably clone this repository and install it with `pip install -e .`. You can test that you didn't break anything with `cytoplasm test`.
 
+If you're messing with a controller and there's a Cytoplasm site in the current working directory, you can run all of the controllers' tests with `cytoplasm test -c`.
+
