@@ -39,9 +39,8 @@ def default_interpreter(source, destination, **kwargs):
         shutil.copyfile(source, destination)
     # otherwise, treat it as a file object.
     else:
-        source_file = open(source)
-        shutil.copyfileobj(source_file, destination)
-        source_file.close()
+        with open(source) as source_file:
+            shutil.copyfileobj(source_file, destination)
 
 def interpret(file, destination, **kwargs):
     "Interpret a file with an interpreter according to its suffix."
