@@ -28,13 +28,9 @@ def SaveReturned(fn):
 
 def default_interpreter(source, destination, **kwargs):
     "Copy from source to destination. Use this if no other interpreters match the file."
-    # if the destination is a string, treat it as a filename
-    if isinstance(destination, str):
-        shutil.copyfile(source, destination)
-    # otherwise, treat it as a file object.
-    else:
-        with open(source) as source_file:
-            shutil.copyfileobj(source_file, destination)
+    # destination is always a file object, so you can copyfileobj.
+    with open(source) as source_file:
+        shutil.copyfileobj(source_file, destination)
 
 def interpret(source, destination, **kwargs):
     "Interpret a file to a destination with an interpreter according to its suffix."
@@ -51,6 +47,4 @@ def interpret_to_filelike(source, destination, **kwargs):
     ending = source.split(".")[-1]
     # and then interpret, based on the ending of the file!
     interpreters.get(ending, default_interpreter)(source, destination, **kwargs)
-
-
 
