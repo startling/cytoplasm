@@ -21,15 +21,9 @@ def SaveReturned(fn):
     '''Some potential interpreters, like Mako, don't give you an easy way to save to a destination.
     In these cases, simply use this function as a decorater.'''
     def InterpreterWithSave(source, destination, **kwargs):
-        # under some circumstances, this should be able to write to file-like objects;
-        # so if destination is a string, assume it's a path; otherwise, it's a file-like object
-        if isinstance(destination, str):
-            f = open(destination, "w")
-        else:
-            f = destination
+        # destination should _always_ be a file or file-like object.
         # pass **kwargs to this function.
-        f.write(fn(source, **kwargs))
-        f.close()
+        destination.write(fn(source, **kwargs))
     return InterpreterWithSave
 
 def default_interpreter(source, destination, **kwargs):
@@ -42,11 +36,21 @@ def default_interpreter(source, destination, **kwargs):
         with open(source) as source_file:
             shutil.copyfileobj(source_file, destination)
 
-def interpret(file, destination, **kwargs):
-    "Interpret a file with an interpreter according to its suffix."
+def interpret(source, destination, **kwargs):
+    "Interpret a file to a destination with an interpreter according to its suffix."
+    # open the destination and write to it.
+    with open(destination, "w") as destination_file:
+        # and, since we now have a file-like object, use interpret_to_filelike
+        interpret_to_filelike(source, destination_file, **kwargs)
+
+def interpret_to_filelike(source, destination, **kwargs):
+    "Interpret a file to a file-like object with an interpreter according to its suffix."
     # get the list of interpreters from the configuration
     interpreters = configuration.get_config().interpreters
-    # figure out the suffix of the file, to use to determine which interpreter to use
-    ending = file.split(".")[-1]
-    interpreters.get(ending, default_interpreter)(file, destination, **kwargs)
+    # figure out the last suffix of the file, to use to determine which interpreter to use
+    ending = source.split(".")[-1]
+    # and then interpret, based on the ending of the file!
+    interpreters.get(ending, default_interpreter)(source, destination, **kwargs)
+
+
 
