@@ -35,10 +35,8 @@ def SaveReturned(fn):
 
 def default_interpreter(source, destination, **kwargs):
     "Copy from source to destination. Use this if no other interpreters match."
-    # destination is always a file object, so you can copyfileobj.
-    with open(source) as source_file:
-        shutil.copyfileobj(source_file, destination)
-
+    # destination and source are always file objects, so you can copyfileobj.
+    shutil.copyfileobj(source, destination)
 
 def interpret(source, destination, **kwargs):
     """Interpret a file to a destination with an interpreter according to
@@ -53,11 +51,19 @@ def interpret(source, destination, **kwargs):
 def interpret_to_filelike(source, destination, **kwargs):
     """Interpret a file to a file-like object with an interpreter according
     to its suffix."""
-    # get the list of interpreters from the configuration
-    interpreters = configuration.get_config().interpreters
     # figure out the last suffix of the file, to use to determine which
     # interpreter to use
     ending = source.split(".")[-1]
     # and then interpret, based on the ending of the file!
-    interpreters.get(ending, default_interpreter)(source, destination,
-            **kwargs)
+    with open(source, "r") as f:
+        interpret_filelike(f, destination, ending, **kwargs)
+
+
+def interpret_filelike(source, destination, suffix, **kwargs):
+    """Given some two file-like objects and a suffix, interpret the source
+    according to the given suffix and write it to the destination file object.
+    """
+    # get the list of interpreters from the configuration
+    interpreters = configuration.get_config().interpreters
+    # and then interpret, based on the ending of the file!
+    interpreters.get(suffix, default_interpreter)(source, destination, **kwargs)
