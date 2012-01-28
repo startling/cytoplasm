@@ -29,11 +29,9 @@ You can start a blank site in an empty directory by running `cytoplasm init bare
 
 Posts go in `_posts` and start with a header that looks like this:
 
-    <!-- metadata
     title: An Example Post
     date: 2011/12/17
     tags: [category1, category2]
-    -->
 
 `cytoplasm build` will build your site and put the output in `_build`.
 
