@@ -16,21 +16,22 @@ def build_site(dir, **args):
     cytoplasm.build(dir)
 
 
-def clean_build_dir(**args):
+def clean_build_dir(dir='.', **args):
     "Clean up the build directory in the current working directory."
     from cytoplasm import configuration
     # get the build_dir from the 
     # configuration file in the current working directory
-    build_dir = configuration.get_config(".").build_dir
+    build_dir = configuration.get_config(dir).build_dir
     if os.path.exists(build_dir):
         # for everything in the build directory....
-        for sub in (os.path.join(build_dir, f) for f in os.listdir(build_dir)):
+        for sub in os.listdir(os.path.join(dir, build_dir)):
+            path = os.path.join(dir, build_dir, sub)
             # if it's a directory, rmtree it
-            if os.path.isdir(sub):
-                shutil.rmtree(sub)
+            if os.path.isdir(path):
+                shutil.rmtree(path)
             # otherwise, it's a file and we can just remove it
             else:
-                os.remove(sub)
+                os.remove(path)
 
 
 def init_site(site, **args):
@@ -103,6 +104,9 @@ build.add_argument("dir", type=str,
 clean = subparsers.add_parser('clean',
         help='Delete the things in the build directory of the cwd.')
 clean.set_defaults(func=clean_build_dir)
+clean.add_argument("dir", type=str,
+        help="The source directory of your site; defaults to cwd.",
+        action="store", nargs="?", default=".")
 # "init" subparse
 init = subparsers.add_parser('init',
         help='Clone a repository to work from (requires Git).')
