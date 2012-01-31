@@ -10,9 +10,12 @@ import shutil
 divider = "=" * 70
 
 
-def build_site(dir, **args):
+def build_site(dir, clean, **args):
     "This is what will be called when the user runs `cytoplasm build`"
     import cytoplasm
+    # if the `clean` flag is true, clean the build directory.
+    if clean:
+        clean_build_dir(dir)
     cytoplasm.build(dir)
 
 
@@ -100,6 +103,9 @@ build.set_defaults(func=build_site)
 build.add_argument("dir", type=str,
         help="The source directory of your site; defaults to cwd.",
         action="store", nargs="?", default=".")
+build.add_argument('-C', '--clean',
+        help="Clean out the build directory before we build things.",
+        action="store_true")
 # `cytoplasm clean` function
 clean = subparsers.add_parser('clean',
         help='Delete the things in the build directory of the cwd.')
