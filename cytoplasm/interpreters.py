@@ -3,7 +3,6 @@ These are some utilites used when writing and handling interpreters.
 '''
 
 import shutil
-from cytoplasm import configuration
 from cytoplasm.errors import InterpreterError
 
 

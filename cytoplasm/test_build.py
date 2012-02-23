@@ -10,7 +10,6 @@ import unittest
 import mako
 import cytoplasm
 from cytoplasm.site import Site
-from cytoplasm import server, configuration
 
 # Figure out where the examples are, in the cytoplasm package.
 _, cytoplasm_directory, _ = imp.find_module("cytoplasm")
