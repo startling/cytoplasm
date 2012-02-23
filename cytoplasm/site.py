@@ -2,6 +2,7 @@
 
 import os
 import imp
+import shutil
 from cytoplasm import interpreters
 from cytoplasm.errors import CytoplasmError
 
