@@ -16,15 +16,15 @@ def build_site(dir, clean, **args):
     # if the `clean` flag is true, clean the build directory.
     if clean:
         clean_build_dir(dir)
-    cytoplasm.build(dir)
+    cytoplasm.Site(dir).build()
 
 
 def clean_build_dir(dir='.', **args):
     "Clean up the build directory in the current working directory."
-    from cytoplasm import configuration
-    # get the build_dir from the 
-    # configuration file in the current working directory
-    build_dir = configuration.get_config(dir).build_dir
+    import cytoplasm
+    # get the build_dir from the configuration file of the Site for the 
+    # current working directory
+    build_dir = cytoplasm.Site(dir).site.config.build_dir
     if os.path.exists(build_dir):
         # for everything in the build directory....
         for sub in os.listdir(os.path.join(dir, build_dir)):
