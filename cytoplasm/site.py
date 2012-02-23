@@ -4,7 +4,7 @@ import os
 import imp
 from cytoplasm import interpreters
 from cytoplasm.errors import CytoplasmError
-from cytoplasm.controllers import controllerclass
+
 
 class Site(object):
     "The most basic representation of a cytoplasm site."

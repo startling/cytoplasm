@@ -5,17 +5,6 @@ import imp
 import os
 
 
-def controllerclass(name):
-    "Given the name of a controller's module, return that controller's class."
-    fp, pathname, description = imp.find_module(name, ["_controllers/"])
-    try:
-        controller = imp.load_module(name, fp, pathname, description)
-        return controller.info["class"]
-    finally:
-        if fp != None:
-            fp.close()
-
-
 class Controller(object):
     """Controllers take data from some files, do stuff with it,
     and write it to the build directory."""
