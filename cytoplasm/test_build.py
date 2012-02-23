@@ -9,6 +9,7 @@ import shutil
 import unittest
 import mako
 import cytoplasm
+from cytoplasm.site import Site
 from cytoplasm import server, configuration
 
 # Figure out where the examples are, in the cytoplasm package.
@@ -24,15 +25,15 @@ class Base(unittest.TestCase):
     def setUp(self, directory=os.path.join(examples_directory, "empty")):
         "Figure out the directories and build the site."
         self.directory = directory
-        # get the site's configuration from the directory specified.
-        self.configuration = configuration.get_config(self.directory)
+        # create a Site object
+        self.site = Site(self.directory)
         # get the build directory from the site's configuration
-        self.build_dir = os.path.join(self.directory,
-                self.configuration.build_dir)
+        self.build_dir = os.path.join(self.site.source,
+                self.site.config.build_dir)
         # delete the build directory, just in case there's something there.
         self.delete_build_dir()
         # and, finally, build the site
-        cytoplasm.build(self.directory)
+        self.site.build()
 
     def delete_build_dir(self):
         "Delete the build directory."
@@ -105,14 +106,14 @@ class TestControllers(Base):
 
     def test_basic_controller(self):
         # for each controller configured:
-        for _, [source_dir, build_dir] in self.configuration.controllers:
+        for _, [source_dir, build_dir] in self.site.config.controllers:
             # make sure the build directories were created.
             self.assertTrue(os.path.exists(os.path.join(self.directory,
                                                         build_dir)))
 
     def test_copier_controller(self):
         # get the controllers whose names are "copier"
-        copiers = [c for c in self.configuration.controllers if
+        copiers = [c for c in self.site.config.controllers if
                 c[0] == "copier"]
         for _, [source_dir, build_dir] in copiers:
             # for each of the files in the build directory...
