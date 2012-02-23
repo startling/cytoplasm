@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import subprocess
 import sys
 import os
 import imp
@@ -43,9 +44,9 @@ def init_site(site, **args):
             "bare": "git://github.com/startling/cytoplasm-bare.git",
             "cytoplasm-site": "git://github.com/startling/cytoplasm-site.git",
     }
-    os.system("git clone %s ." % (sites[site]))
-    os.system("git submodule init")
-    os.system("git submodule update")
+    subprocess.call(["git", "clone", sites[site], "."])
+    subprocess.call(["git", "submodule", "init"])
+    subprocess.call(["git", "submodule", "update"])
 
 
 def serve_site(port, rebuild, **args):
