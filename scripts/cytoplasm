@@ -24,7 +24,7 @@ def clean_build_dir(dir='.', **args):
     import cytoplasm
     # get the build_dir from the configuration file of the Site for the 
     # current working directory
-    build_dir = cytoplasm.Site(dir).site.config.build_dir
+    build_dir = cytoplasm.Site(dir).config.build_dir
     if os.path.exists(build_dir):
         # for everything in the build directory....
         for sub in os.listdir(os.path.join(dir, build_dir)):
