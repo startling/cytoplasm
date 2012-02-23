@@ -19,12 +19,14 @@ def controllerclass(name):
 class Controller(object):
     """Controllers take data from some files, do stuff with it,
     and write it to the build directory."""
-    def __init__(self, data, destination, templates="_templates"):
-        # take three arguments: the source directory, the destination
+    def __init__(self, site, data, destination, templates="_templates"):
+        # take four arguments: the site, the source directory, the destination
         # directory, and optionally a directory wherein the templates reside.
-        self.data_directory = data
-        self.destination_directory = destination
-        self.templates_directory = templates
+        # assume these are relative pathnames.
+        self.site = site
+        self.data_directory = os.path.join(site.source, data)
+        self.destination_directory = os.path.join(site.source, destination)
+        self.templates_directory = os.path.join(site.source, templates)
         # create the destination directory, if it doesn't exist
         if not os.path.exists(self.destination_directory):
             os.mkdir(self.destination_directory)
