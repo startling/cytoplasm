@@ -5,6 +5,7 @@ import sys
 import os
 import imp
 import shutil
+import cytoplasm
 
 
 # This is the divider that's used for some subcommands.
@@ -13,7 +14,6 @@ divider = "=" * 70
 
 def build_site(dir, clean, **args):
     "This is what will be called when the user runs `cytoplasm build`"
-    import cytoplasm
     # if the `clean` flag is true, clean the build directory.
     if clean:
         clean_build_dir(dir)
@@ -22,7 +22,6 @@ def build_site(dir, clean, **args):
 
 def clean_build_dir(dir='.', **args):
     "Clean up the build directory in the current working directory."
-    import cytoplasm
     # get the build_dir from the configuration file of the Site for the 
     # current working directory
     build_dir = cytoplasm.Site(dir).config.build_dir
@@ -84,6 +83,33 @@ def test_cytoplasm(test_controllers, **args):
             print(divider)
 
 
+def git_deploy(url, branch, dir, **args):
+    # instantiate the site
+    site = cytoplasm.Site(dir)
+    # deduce the full path to the build directory
+    build_dir = os.path.join(site.source, site.config.build_dir)
+    # if there isn't a build directory, make one.
+    if not os.path.exists(build_dir):
+        os.mkdir(build_dir)
+    # if there isn't a git repository in the build directory...
+    if not os.path.exists(os.path.join(build_dir, ".git")):
+        subprocess.call(["git", "init"], cwd=build_dir)
+    # try to make a branch that named `branch`
+    subprocess.call(["git", "branch", branch], cwd=build_dir)
+    # and then check it out
+    subprocess.call(["git", "checkout", branch], cwd=build_dir)
+    # pull from the given remote branch
+    subprocess.call(["git", "pull", url[0], branch], cwd=build_dir)
+    # build the site
+    site.build()
+    # commit everything
+    subprocess.call(["git", "add", "-A"], cwd=build_dir)
+    subprocess.call(["git", "commit", "-m",
+        "rebuilt by `cytoplasm git-deploy`"], cwd=build_dir)
+    # and, finally, push.
+    subprocess.call(["git", "push", url[0], branch], cwd=build_dir)
+
+
 class Parser(argparse.ArgumentParser):
     "A custom parser class with more helpful error messages."
     def error(self, message):
@@ -136,6 +162,19 @@ test = subparsers.add_parser('test',
 test.set_defaults(func=test_cytoplasm)
 test.add_argument("-c", "--test-controllers", action="store_true",
         help="Run tests for the controllers in this site directory.")
+# git deploy subparser
+gd = subparsers.add_parser('git-deploy',
+        help="Push the build directory for this site to a git repository.")
+gd.set_defaults(func=git_deploy)
+gd.add_argument("url", type=str,
+        help="The remote git url to push to.",
+        action="store", nargs=1)
+gd.add_argument("branch", type=str,
+        help="The remote branch url to push to; defaults to 'gh-pages'",
+        default="gh-pages", action="store", nargs="?")
+gd.add_argument("dir", type=str,
+        help="The source directory of your site; defaults to cwd.",
+        action="store", nargs="?", default=".")
 # Parse the arguments from the command line.
 args = parser.parse_args()
 # run the functions associated with the arguments.
