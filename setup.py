@@ -6,7 +6,7 @@ from distutils.core import setup
 
 setup(
     name = "Cytoplasm",
-    version = "0.06.2",
+    version = "0.06.3",
     author = "startling",
     author_email = "tdixon51793@gmail.com",
     url = "http://cytoplasm.somethingsido.com",
