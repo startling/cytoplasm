@@ -6,6 +6,7 @@ import os
 import imp
 import sys
 from cytoplasm import controllers
+from cytoplasm.temp import site
 
 
 # Specify the build directory, where the built site will be copied to
@@ -35,7 +36,7 @@ import mako.lookup
 import mako.template
 # Mako should look for templates to include in the current directory.
 # This should let you include things like "_templates/site.mako"
-mako_lookup = mako.lookup.TemplateLookup(directories=['.'])
+mako_lookup = mako.lookup.TemplateLookup(directories=[site.source])
 
 
 # Mako doesn't come with an easy built-in way to save the output to a

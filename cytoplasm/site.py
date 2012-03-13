@@ -5,6 +5,7 @@ import imp
 import shutil
 from cytoplasm import interpreters
 from cytoplasm.errors import CytoplasmError
+import cytoplasm.temp
 
 
 class Site(object):
@@ -23,9 +24,15 @@ class Site(object):
         """
         config_file = os.path.join(self.source, "_config.py")
         if os.path.exists(config_file):
+            # set the temporary global to be this site
+            #FIXME: this is a glorious hack of a way to pass variables
+            # to the configuration and default configuration files.
+            cytoplasm.temp.site = self
             # load the source file as a module and import it.
             imp.load_source("_config", config_file)
             import _config
+            # un-set the temporary global
+            cytoplasm.temp.site = None
             return _config
         else:
             # if there's no configuration file, raise an error.
