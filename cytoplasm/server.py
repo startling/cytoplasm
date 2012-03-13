@@ -52,9 +52,14 @@ def most_recent():
     """
     directory = site.source
     build_dir = site.config.build_dir
-    # get the candidate files:
+    #get the candidate files:
     files = [f for f in os.listdir(directory) if f != build_dir and not
             f.startswith(".")]
+    # append files in additional watch directories
+    if site.config.watch_dirs:
+        for dir in site.config.watch_dirs:
+            files += [os.path.join(dir, f) for f in 
+            os.listdir(os.path.join(directory, dir)) if not f.startswith(".")]
     # get each of their times
     times = [os.stat(os.path.join(directory, f)).st_mtime for f in files]
     # the highest time here is the most recent; return that.
