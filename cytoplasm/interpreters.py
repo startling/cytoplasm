@@ -1,5 +1,5 @@
-'''
-These are some utilites used when writing and handling interpreters.
+# -*- coding: utf-8 -*-
+''' These are some utilites used when writing and handling interpreters.
 '''
 
 import shutil

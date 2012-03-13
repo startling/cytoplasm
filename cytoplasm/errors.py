@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''Some errors that can be raised...'''
 
 

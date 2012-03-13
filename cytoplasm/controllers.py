@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''These are the things used in making and using controllers.
 '''
 

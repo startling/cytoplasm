@@ -1,6 +1,6 @@
-'''
-A unittest test suite for Cytoplasm.
-These work on the example sites in `cytoplasm/tests`.
+# -*- coding: utf-8 -*-
+''' A unittest test suite for Cytoplasm.  These work on the example sites in
+`cytoplasm/tests`.
 '''
 
 import os

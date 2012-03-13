@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ''' Cytoplasm is a static site compiler meant to be used mostly as a blogging
 engine.
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*0
 '''This is a default configuration file, that should be imported in the
 user's configuration.
 '''

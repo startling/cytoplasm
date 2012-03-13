@@ -1,5 +1,5 @@
-'''
-These are the things that are used when you `cytoplasm serve`.
+# -*- coding: utf-8 -*-
+''' These are the things that are used when you `cytoplasm serve`.
 '''
 
 import os
