@@ -52,7 +52,7 @@ def most_recent():
     """
     directory = site.source
     build_dir = site.config.build_dir
-    #get the candidate files:
+    # get the candidate files:
     files = [f for f in os.listdir(directory) if f != build_dir and not
             f.startswith(".")]
     # append files in additional watch directories
