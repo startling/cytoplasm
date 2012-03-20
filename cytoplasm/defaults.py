@@ -64,3 +64,7 @@ def mako_interpreter(file, **kwargs):
 #   usually at least the controller's source directory and where files
 #   should be output to, in the build directory.
 controllers = []
+
+# This is a list of folders to be watched for file modifications to trigger
+# a rebuild of the site when running cytoplasm serve -r
+watch_dirs = []
