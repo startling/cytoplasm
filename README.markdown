@@ -11,6 +11,8 @@ Here are some things I think are exciting about it:
 
 * There's a testing server that automatically rebuilds your site whenever you make a change to it -- `cytoplasm serve -r`. This makes playing with templates and controllers really simple and painless.
 
+* Easy deployment to github pages with `cytoplasm git-deploy`; never worry again about how clumsy using git for generated content is.
+
 ## Instructions
 
 ### Install
