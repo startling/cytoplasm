@@ -3,7 +3,7 @@ Hey! This is Cytoplasm, a simple static blogging-and-other-things generator. Cyt
 
 Here are some things I think are exciting about it:
 
-* Cytoplasm makes really portable websites. It just outputs a bunch of HTML files that you can put pretty much anywhere. The build script, `cytoplasm`, will run anywhere you have Python installed. It's tested in 2.7.2 and 3.2.
+* Cytoplasm makes really portable websites. It just outputs a bunch of HTML files that you can put pretty much anywhere. The build script, `cytoplasm`, will run anywhere you have Python installed. It's tested in 2.7.2.
 
 * It's really configurable. Almost everything Cytoplasm does is defined by your site's interpreters and controllers, which live in `_config.py` and `_controllers`, respectively. You can change anything there; interpreters are just functions with a certain decorator and controllers are just classes that inherit from `cytoplasm.controllers.Controller`.
 
